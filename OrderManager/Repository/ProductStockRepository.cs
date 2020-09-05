@@ -1,10 +1,11 @@
-﻿using System;
+﻿using OrderManager.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace OrderManager.Repository
 {
-    public class ProductStockRepository
+    public class ProductStockRepository : IProductStockRepository
     {
         private static Dictionary<Product, int> _productStockDatabase = Setup();
 

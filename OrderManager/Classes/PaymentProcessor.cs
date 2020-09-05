@@ -1,10 +1,11 @@
-﻿using System;
+﻿using OrderManager.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace OrderManager.Classes
 {
-    public class PaymentProcessor
+    public class PaymentProcessor : IPaymentProcessor
     {
         public void ChargeCreditCard(string cardNumber, DateTime cardExpiryDate)
         {
