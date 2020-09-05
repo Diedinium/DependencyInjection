@@ -10,7 +10,7 @@ namespace OrderManager
             var orderManager = new OrderManager();
             var cardNumber = string.Empty;
             var cardExpiryDate = string.Empty;
-            int cardNumberParsed = 0;
+            long cardNumberParsed = 0;
             DateTime cardExpiryDateParsed = new DateTime();
 
             while (product != "exit")
@@ -29,20 +29,50 @@ namespace OrderManager
                     {
                         Console.WriteLine("Selected Product : " + productEnum.ToString());
 
+                        bool exitCardLoop = false;
                         do
                         {
-                            Console.Write("Card number : ");
+                            Console.Write("Card number (XXXXXXXXXXXXXXXX) : ");
                             cardNumber = Console.ReadLine();
-                        } while (!int.TryParse(cardNumber, out cardNumberParsed));
+                            if (!Int64.TryParse(cardNumber, out cardNumberParsed))
+                            {
+                                Console.WriteLine("Error: This is not a valid card number.");
+                            }
+                            else if (cardNumber.Length < 16)
+                            {
+                                Console.WriteLine("Error: Card length must be 16 digits long.");
+                            }
+                            else
+                            {
+                                exitCardLoop = true;
+                            }
+                        } while (!exitCardLoop);
 
+                        bool exitExpiryLoop = false;
                         do
                         {
                             Console.WriteLine("Card expiry date (MM/YYYY) : ");
                             cardExpiryDate = Console.ReadLine();
-                        } while (!DateTime.TryParse(cardExpiryDate, out cardExpiryDateParsed));
+                            if (!DateTime.TryParse(cardExpiryDate, out cardExpiryDateParsed))
+                            {
+                                Console.WriteLine("Error: Date not recongnised as a valid date.");
+                            }
+                            else
+                            {
+                                exitExpiryLoop = true;
+                            }
+                        } while (!exitExpiryLoop);
 
-                        orderManager.Submit(productEnum, cardNumberParsed, cardExpiryDateParsed);
-                        Console.WriteLine("Submitted payment.");
+                        try
+                        {
+                            orderManager.Submit(productEnum, cardNumber, cardExpiryDateParsed);
+                            Console.WriteLine("Payment made, product being shipped by mail.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                        
                     }
                     else
                     {
